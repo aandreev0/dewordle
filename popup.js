@@ -13,12 +13,10 @@ function updateSuggestions2(absentLetters, presentLetters, knownLetters){
     if(absentLetters != '' && w.match( new RegExp('['+absentLetters+']'))){ // excluded letters
       return false;
     }else{
-      //if(presentLetters=='' || w.match( new RegExp('['+presentLetters+']'))   ){ // included letters
       for(let c = 0;c<presentLetters.length;c++){
         if(!w.match( new RegExp('['+presentLetters[c]+']'))){
           return false;
         }
-
       }
       for(let i=0;i<5;i++){
         if(knownLetters[i] != '.'){ // testing for known letters
@@ -29,28 +27,21 @@ function updateSuggestions2(absentLetters, presentLetters, knownLetters){
           }
         }
       }
-
       counter += 1; // found potential hit
       potentialWords.push(w); // add word to list
-
     }
   }
 
   var words = wordsList.split(",");
   words.forEach(elem => matchWordle(elem));
-  //document.getElementById('suggestions').innerHTML =   counter +"<br>" + document.getElementById('suggestions').innerHTML;
   return(potentialWords.join('<br>'));
 }
-
-
 
 
 const operateDOMf = function operateDOM(){
 
     grs = document.querySelector('game-app').shadowRoot.querySelectorAll('game-row');
-
     console.log('operating DOM :: grs.length = ' + grs.length)
-
     var absent  = '';
     var present = '';
     var correct = '.....';
@@ -60,17 +51,13 @@ const operateDOMf = function operateDOM(){
       g = grs[i];
       gi = g.shadowRoot.querySelectorAll('game-tile');
       if(gi[0].getAttribute('letter') != ''){
-
         for(let j=0;j<5;j++){
-
           if(gi[j].getAttribute('evaluation') == 'present'){
             present += gi[j].getAttribute('letter');
           }
-
           if(gi[j].getAttribute('evaluation')== 'absent'){
             absent += gi[j].getAttribute('letter');
           }
-
           if(gi[j].getAttribute('evaluation') == 'correct'){
 
             correct_temp = [];
@@ -80,16 +67,11 @@ const operateDOMf = function operateDOM(){
             correct_temp[j] = gi[j].getAttribute('letter');
             correct = correct_temp.join('');
           }
-
         }
       }
-
     }
-
     console.log('Absent='+absent + '; present='+present+'; correct = '+correct);
     return([absent, present, correct])
-    //return(['absent', 'present', 'correct'])
-
   }
 
 
@@ -99,19 +81,14 @@ function updateSuggestions(){
     { active: true, windowId: chrome.windows.WINDOW_ID_CURRENT },
     function(tabs) {
       const { id: tabId } = tabs[0].url;
-      let code = operateDOMf.toString() + ";operateDOM();";
-      chrome.tabs.executeScript(tabId, { code }, function (result) {
-        // result has the return value from `code`
-        //ocument.getElementById('suggestions').innerHTML = 'res='+result[0][2];
-        document.getElementById("suggestions").innerHTML = updateSuggestions2(result[0][0], result[0][1], result[0][2]);
+      let code = operateDOMf.toString() + ";operateDOM();"; // code to perform in context of current tab
 
+      chrome.tabs.executeScript(tabId, { code }, function (result) {
+        // performs in context of the extension
+        document.getElementById("suggestions").innerHTML = updateSuggestions2(result[0][0], result[0][1], result[0][2]);
       });
     }
   );
-
-   // get results from chrome page
-   // perform updates for updateSuggestions2()
-
 }
 
 

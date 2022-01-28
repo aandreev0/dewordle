@@ -75,14 +75,16 @@ const operateDOMf = function operateDOM(){
     // but also second copy present elsewhere in wrong place
     // case: enter rObOt but the correct is mOuth
     // In that case second O will be labeled as absent and screw the checker
+
+
     absent_temp = [];
     for(let iii=0; iii < absent.length; iii++){
-      if(correct.indexOf(absent[iii])==-1){
+      if(correct.indexOf(absent[iii])==-1 && present.indexOf(absent[iii])==-1){
             absent_temp.push(absent[iii]);
       }
     }
-
     absent = absent_temp.join('');
+
     console.log('Absent='+absent + '; present='+present+'; correct = '+correct);
     return([absent, present, correct])
   }

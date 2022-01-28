@@ -34,7 +34,7 @@ function updateSuggestions2(absentLetters, presentLetters, knownLetters){
 
   var words = wordsList.split(",");
   words.forEach(elem => matchWordle(elem));
-  return(potentialWords.join('<br>'));
+  return( "<b>"+ potentialWords[Math.floor(Math.random()*potentialWords.length)]+ "</b><br>"+ potentialWords.join('<br>'));
 }
 
 
